@@ -45,12 +45,6 @@ const Tours = () => {
 
       <section className="pt-0">
         <Container>
-          {username === "admin" ? (
-            <button className="btnadd">Add Tour</button>
-          ) : (
-            ""
-          )}
-
           {loading && <h4 className="text-center pt-5">LOADING..........</h4>}
           {error && <h4 className="text-center pt-5">{error}</h4>}
           {!loading && !error && (
