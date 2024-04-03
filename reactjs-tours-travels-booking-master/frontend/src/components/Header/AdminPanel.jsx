@@ -1,17 +1,15 @@
 import React, { useState, useContext } from "react";
 import ListTour from "./ListTour";
-// import Bs
 import { BASE_URL } from "../../utils/config";
 import "./Admin.css";
 import { AuthContext } from "../../context/AuthContext";
-// import Tours from "../../pages/Tours";
 
 const AdminPanel = ({ username }) => {
   // State to control the visibility of the Users and Tours components
   const [showUsers, setShowUsers] = useState(false);
   const [showTours, setShowTours] = useState(false);
   const [users, setUsers] = useState([]);
-  const { user, token } = useContext(AuthContext);
+  const { token } = useContext(AuthContext);
   console.log(token);
 
   const handleButtonClick = async (buttonName) => {
