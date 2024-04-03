@@ -7,20 +7,18 @@ import { AuthContext } from "../../context/AuthContext";
 // import Tours from "../../pages/Tours";
 
 const AdminPanel = ({ username }) => {
-  // State to control the visibility of the Tours component
+  // State to control the visibility of the Users and Tours components
+  const [showUsers, setShowUsers] = useState(false);
   const [showTours, setShowTours] = useState(false);
   const [users, setUsers] = useState([]);
   const { user, token } = useContext(AuthContext);
   console.log(token);
+
   const handleButtonClick = async (buttonName) => {
     // Handle button click based on the buttonName if needed
-    if (buttonName === "listTours") {
-      setShowTours(true); // Show Tours component when List Tours button is clicked
-    }
-
     if (buttonName === "listUsers") {
-      // setuser(true);
-
+      setShowUsers(true);
+      setShowTours(false);
       const res = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         credentials: "include",
@@ -29,13 +27,17 @@ const AdminPanel = ({ username }) => {
         },
       });
       const result = await res.json();
-      if (!result.success) alert("you are not admin");
+      if (!result.success) alert("You are not an admin");
+      else setUsers(result.data); // Update users state with fetched data
+    } else if (buttonName === "listTours") {
+      console.log("test1");
+      setShowTours(true);
+      setShowUsers(false);
     }
   };
 
   return (
     <>
-      <h1 className="h1 text-center">Admin</h1>
       <div className="container admin-panel">
         <div className="left-panel">
           <button
@@ -58,31 +60,32 @@ const AdminPanel = ({ username }) => {
           </button>
         </div>
       </div>
-      {/* Render user data if users state is not empty */}
-      {users.length > 0 && (
-        <div className="user-list">
-          <h2>User List</h2>
+
+      {showUsers && (
+        <div className="container user-list">
+          <h2 className="userHead h2 text-center ">User List</h2>
           <ul>
-            {users.map((user) => (
-              <li key={user.id}>
-                {/* Render user information */}
-                <div>
-                  <strong>ID:</strong> {user._id}
-                </div>
-                <div>
-                  <strong>Name:</strong> {user.username}
-                </div>
-                <div>
-                  <strong>Email:</strong> {user.email}
-                </div>
-                {/* Add more user information if needed */}
-              </li>
-            ))}
+            <li>
+              <div>Number Of Users</div>
+              <div>ID</div>
+              <div>Username</div>
+              <div>Email</div>
+            </li>
+            {users.map(
+              (user, index) =>
+                user.username !== "admin" && (
+                  <li key={user._id}>
+                    <div>{index}</div>
+                    <div>{user._id}</div>
+                    <div>{user.username}</div>
+                    <div>{user.email}</div>
+                  </li>
+                )
+            )}
           </ul>
         </div>
       )}
 
-      {/* Render Tours component if showTours state is true */}
       {showTours && <ListTour />}
     </>
   );
