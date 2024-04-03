@@ -9,6 +9,7 @@ import { AuthContext } from "../../context/AuthContext";
 const AdminPanel = ({ username }) => {
   // State to control the visibility of the Tours component
   const [showTours, setShowTours] = useState(false);
+  const [users, setUsers] = useState([]);
   const { user, token } = useContext(AuthContext);
   console.log(token);
   const handleButtonClick = async (buttonName) => {
@@ -29,8 +30,6 @@ const AdminPanel = ({ username }) => {
       });
       const result = await res.json();
       if (!result.success) alert("you are not admin");
-
-      console.log(result, token);
     }
   };
 
@@ -59,6 +58,29 @@ const AdminPanel = ({ username }) => {
           </button>
         </div>
       </div>
+      {/* Render user data if users state is not empty */}
+      {users.length > 0 && (
+        <div className="user-list">
+          <h2>User List</h2>
+          <ul>
+            {users.map((user) => (
+              <li key={user.id}>
+                {/* Render user information */}
+                <div>
+                  <strong>ID:</strong> {user._id}
+                </div>
+                <div>
+                  <strong>Name:</strong> {user.username}
+                </div>
+                <div>
+                  <strong>Email:</strong> {user.email}
+                </div>
+                {/* Add more user information if needed */}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Render Tours component if showTours state is true */}
       {showTours && <ListTour />}

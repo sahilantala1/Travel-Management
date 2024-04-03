@@ -175,8 +175,7 @@ ul {
 
 .left-panel {
   display: flex;
-  flex-direction: column; /* Arrange buttons vertically */
-  align-items: flex-start; /* Align buttons to the left */
+  justify-content: space-between !important;
 }
 
 .btn {
