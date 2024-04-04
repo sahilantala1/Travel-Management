@@ -30,14 +30,10 @@ const ListTour = () => {
         credentials: "include",
       });
       if (response.ok) {
-        // Tour deleted successfully, refetch the data to update the tour list
-        // refetch();
-        // Set reload to true to trigger component reload
         refetch();
 
         setReload(true);
       } else {
-        // Handle error if deletion fails
         console.error("Failed to delete tour. Status:", response.status);
       }
     } catch (error) {
@@ -45,13 +41,10 @@ const ListTour = () => {
     }
   };
   useEffect(() => {
-    // After reload is set to true, reset it after a brief delay
     if (reload) {
       const timeout = setTimeout(() => {
         setReload(false);
       }, 100);
-
-      // Clear timeout in cleanup function to prevent memory leaks
       return () => clearTimeout(timeout);
     }
   }, [reload]);

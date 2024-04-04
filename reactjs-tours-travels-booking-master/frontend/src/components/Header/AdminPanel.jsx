@@ -3,20 +3,22 @@ import ListTour from "./ListTour";
 import { BASE_URL } from "../../utils/config";
 import "./Admin.css";
 import { AuthContext } from "../../context/AuthContext";
+import AddTour from "./AddTour";
 
 const AdminPanel = ({ username }) => {
   // State to control the visibility of the Users and Tours components
   const [showUsers, setShowUsers] = useState(false);
   const [showTours, setShowTours] = useState(false);
+  const [showAddTour, setShowAddTour] = useState(false);
   const [users, setUsers] = useState([]);
   const { token } = useContext(AuthContext);
   console.log(token);
 
   const handleButtonClick = async (buttonName) => {
-    // Handle button click based on the buttonName if needed
     if (buttonName === "listUsers") {
       setShowUsers(true);
       setShowTours(false);
+      setShowAddTour(false); // Close AddTour form if open
       const res = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         credentials: "include",
@@ -26,10 +28,14 @@ const AdminPanel = ({ username }) => {
       });
       const result = await res.json();
       if (!result.success) alert("You are not an admin");
-      else setUsers(result.data); // Update users state with fetched data
+      else setUsers(result.data);
     } else if (buttonName === "listTours") {
-      console.log("test1");
       setShowTours(true);
+      setShowUsers(false);
+      setShowAddTour(false); // Close AddTour form if open
+    } else if (buttonName === "addTour") {
+      setShowAddTour(true);
+      setShowTours(false);
       setShowUsers(false);
     }
   };
@@ -54,7 +60,7 @@ const AdminPanel = ({ username }) => {
             className="btn btn-primary m-2"
             onClick={() => handleButtonClick("addTour")}
           >
-            Add Tour
+            Create Tour
           </button>
         </div>
       </div>
@@ -85,6 +91,7 @@ const AdminPanel = ({ username }) => {
       )}
 
       {showTours && <ListTour />}
+      {showAddTour && <AddTour onClose={() => setShowAddTour(false)} />}
     </>
   );
 };
