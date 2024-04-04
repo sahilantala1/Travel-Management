@@ -10,7 +10,6 @@ const AdminPanel = ({ username }) => {
   const [showUsers, setShowUsers] = useState(false);
   const [showTours, setShowTours] = useState(false);
   const [showAddTour, setShowAddTour] = useState(false);
-
   const [users, setUsers] = useState([]);
   const { token } = useContext(AuthContext);
   console.log(token);
@@ -19,6 +18,7 @@ const AdminPanel = ({ username }) => {
     if (buttonName === "listUsers") {
       setShowUsers(true);
       setShowTours(false);
+      setShowAddTour(false); // Close AddTour form if open
       const res = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         credentials: "include",
@@ -30,13 +30,13 @@ const AdminPanel = ({ username }) => {
       if (!result.success) alert("You are not an admin");
       else setUsers(result.data);
     } else if (buttonName === "listTours") {
-      console.log("test1");
       setShowTours(true);
       setShowUsers(false);
+      setShowAddTour(false); // Close AddTour form if open
     } else if (buttonName === "addTour") {
+      setShowAddTour(true);
       setShowTours(false);
       setShowUsers(false);
-      setShowAddTour(true);
     }
   };
 
