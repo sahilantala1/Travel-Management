@@ -45,7 +45,8 @@ const Footer = () => {
             <div className="logo">
               <img src={logo} alt="" />
               <p>
-              Travel the world, where every moment is an adventure waiting to be discovered.
+                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                Commodi, enim.
               </p>
               <div className="social__link d-flex align-items-center gap-4">
                 <span>
@@ -105,7 +106,7 @@ const Footer = () => {
                   </span>
                   Address:
                 </h6>
-                <p className="mb-0">123 Main Street London,Uk</p>
+                <p className="mb-0">Lorem</p>
               </ListGroupItem>
 
               <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-3">
@@ -116,7 +117,7 @@ const Footer = () => {
                   Email:
                 </h6>
 
-                <p className="mb-0">tours&travels@gmail.com</p>
+                <p className="mb-0">Lorem</p>
               </ListGroupItem>
 
               <ListGroupItem className="ps-0 border-0 d-flex align-items-center gap-3">
@@ -127,7 +128,7 @@ const Footer = () => {
                   Phone:
                 </h6>
 
-                <p className="mb-0">+44 20 8400 6630</p>
+                <p className="mb-0">Lorem</p>
               </ListGroupItem>
             </ListGroup>
           </Col>

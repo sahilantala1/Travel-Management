@@ -3,6 +3,7 @@ import { Card, CardBody } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./tour-card.css";
 import calculateAvgRating from "../../utils/avgRating";
+import { IMAGE_URL } from "../../utils/config";
 
 const TourCard2 = ({ tour, onDelete }) => {
   const { _id, title, city, photo, price, featured, reviews } = tour;
@@ -19,7 +20,7 @@ const TourCard2 = ({ tour, onDelete }) => {
     <div className="tour__card">
       <Card>
         <div className="tour__img">
-          <img src={photo} alt="tour-img" />
+          <img src={IMAGE_URL + photo} alt="tour-img" />
           {featured && <span>Featured</span>}
         </div>
 

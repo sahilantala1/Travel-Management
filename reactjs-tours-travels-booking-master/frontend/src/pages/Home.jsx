@@ -29,7 +29,10 @@ const Home = () => {
                      </div>
                      <h1>Traveling opens the door to creating <span className='hightlight'> memories</span></h1>
                      <p>
-                     Begin your journey to unforgettable destinations with our exclusive tour packages include adventure Explore our diverse range of travel experiences and book your next adventure todayBrowse our collection of handpicked tours, tailored to  every wanderlust craving.
+                        Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                        Ullam ipsum nobis asperiores soluta voluptas quas voluptates.
+                        Molestiae tempora dignissimos, animi praesentium molestias perferendis
+                        porro expedita delectus. Soluta natus porro.
                      </p>
                   </div>
                </Col>
@@ -91,8 +94,8 @@ const Home = () => {
                   <div className="experience__content">
                      <Subtitle subtitle={'Experience'} />
                      <h2>With our all experience <br /> we will serve you</h2>
-                     <p>we'll craft expertise and dedication the perfect tour experience for you.
-                        <br /> Explore our website and embark journey with unforgettable memories . </p>
+                     <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+                        <br /> Quas aliquam, hic tempora inventore suscipit unde. </p>
                   </div>
 
                   <div className="counter__wrapper d-flex align-items-center gap-5">
