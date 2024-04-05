@@ -5,7 +5,6 @@ import useFetch from "../../hooks/useFetch.js";
 import TourCard2 from "./TourCard2.jsx";
 
 const ListTour = () => {
-  // console.log('okkk')
   const [pageCount, setPageCount] = useState(0);
   const [page, setPage] = useState(0);
 
