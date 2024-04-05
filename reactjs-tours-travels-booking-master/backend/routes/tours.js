@@ -1,31 +1,48 @@
-import express from 'express'
-import { createTour, deleteTour, getAllTour, getFeaturedTour, getSingleTour, getTourBySearch, getTourCount, updateTour } from '../Controllers/tourControllers.js'
+import express from "express";
+import {
+  createTour,
+  deleteTour,
+  getAllTour,
+  getFeaturedTour,
+  getSingleTour,
+  getTourBySearch,
+  getTourCount,
+  updateTour,
+} from "../Controllers/tourControllers.js";
+import multer from "multer";
+import { verifyAdmin } from "../utils/verifyToken.js";
 
-import { verifyAdmin } from '../utils/verifyToken.js'
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, file.originalname);
+  },
+});
 
-const router = express.Router()
+const upload = multer({ storage: storage });
 
-//Create new tour 
-router.post('/', verifyAdmin, createTour)
+const router = express.Router();
 
-//Update tour 
-router.put('/:id', verifyAdmin, updateTour)
+//Create new tour
+router.post("/", upload.single("photo"), verifyAdmin, createTour);
 
-//Delete tour 
-router.delete('/:id', verifyAdmin, deleteTour)
+//Update tour
+router.put("/:id", verifyAdmin, updateTour);
 
-//Get single tour 
-router.get('/:id', getSingleTour)
+//Delete tour
+router.delete("/:id", verifyAdmin, deleteTour);
 
-//Get all tour 
-router.get('/', getAllTour)
+//Get single tour
+router.get("/:id", getSingleTour);
+
+//Get all tour
+router.get("/", getAllTour);
 
 //Get tour by search
-router.get("/search/getTourBySearch", getTourBySearch)
-router.get("/search/getFeaturedTour", getFeaturedTour)
-router.get("/search/getTourCount", getTourCount)
+router.get("/search/getTourBySearch", getTourBySearch);
+router.get("/search/getFeaturedTour", getFeaturedTour);
+router.get("/search/getTourCount", getTourCount);
 
-
-
-
-export default router
+export default router;
