@@ -4,6 +4,7 @@
 
 .user-list {
   margin-top: 20px;
+  text-align: center;
 }
 
 .user-list ul {
@@ -35,3 +36,4 @@
 .user-list li > div:not(:first-child) {
   border-left: 1px solid #ccc;
 }
+
