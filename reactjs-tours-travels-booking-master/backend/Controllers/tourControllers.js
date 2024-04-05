@@ -47,8 +47,9 @@ export const getSingleTour = async (req, res) => {
 
    try {
       const tour = await Tour.findById(id).populate('reviews')
-
+      // console.log(tour);
       res.status(200).json({ success: true, message: 'Successfully', data: tour })
+      
    } catch (error) {
       res.status(404).json({ success: false, message: 'Not Found' })
    }
