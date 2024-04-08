@@ -44,7 +44,8 @@
 }
 
 .footer__quick-links p {
-   font-size: 1.2rem;
+   font-size: 15px;
+   font-weight:450;
 }
 
 .copyright {
