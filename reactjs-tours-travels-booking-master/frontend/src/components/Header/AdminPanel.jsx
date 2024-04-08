@@ -4,6 +4,8 @@ import { BASE_URL } from "../../utils/config";
 import "./Admin.css";
 import { AuthContext } from "../../context/AuthContext";
 import AddTour from "./AddTour";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const AdminPanel = ({ username }) => {
   // State to control the visibility of the Users and Tours components
@@ -37,6 +39,22 @@ const AdminPanel = ({ username }) => {
       setShowAddTour(true);
       setShowTours(false);
       setShowUsers(false);
+    }
+  };
+
+  const deleteUser = async (userId) => {
+    const res = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    const result = await res.json();
+    if (result.success) {
+      setUsers(users.filter(user => user._id !== userId)); // Update user list after deletion
+    } else {
+      alert("Failed to delete user");
     }
   };
 
@@ -74,6 +92,7 @@ const AdminPanel = ({ username }) => {
               <div>ID</div>
               <div>Username</div>
               <div>Email</div>
+              <div className="delete-user">Action</div> {/* Added column for action */}
             </li>
             {users.map(
               (user, index) =>
@@ -83,6 +102,10 @@ const AdminPanel = ({ username }) => {
                     <div>{user._id}</div>
                     <div>{user.username}</div>
                     <div>{user.email}</div>
+                    <div>
+                    <FontAwesomeIcon style={{ backgroundColor: 'white', color: 'red' }} 
+                     icon={faTrashAlt} onClick={() => deleteUser(user._id)} />
+                    </div>
                   </li>
                 )
             )}

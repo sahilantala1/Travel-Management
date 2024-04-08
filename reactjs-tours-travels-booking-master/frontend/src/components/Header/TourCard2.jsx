@@ -3,6 +3,7 @@ import { Card, CardBody } from "reactstrap";
 import { Link } from "react-router-dom";
 import "./tour-card.css";
 import calculateAvgRating from "../../utils/avgRating";
+import { IMAGE_URL } from "../../utils/config";
 
 const TourCard2 = ({ tour, onDelete }) => {
   const { _id, title, city, photo, price, featured, reviews } = tour;
@@ -10,16 +11,18 @@ const TourCard2 = ({ tour, onDelete }) => {
   const { totalRating, avgRating } = calculateAvgRating(reviews);
 
   const handleDelete = () => {
-    alert("You Want To Delete");
-    console.log("Delete button clicked for tour ID:", _id);
-    onDelete();
+    const isConfirmed = window.confirm("Are you sure?");
+    if (isConfirmed) {
+      console.log("Delete button clicked for tour ID:", _id);
+      onDelete();
+    }
   };
 
   return (
     <div className="tour__card">
       <Card>
         <div className="tour__img">
-          <img src={photo} alt="tour-img" />
+          <img src={IMAGE_URL + photo} alt="tour-img" />
           {featured && <span>Featured</span>}
         </div>
 
@@ -51,7 +54,12 @@ const TourCard2 = ({ tour, onDelete }) => {
             <button className="btn btn-danger" onClick={handleDelete}>
               Delete
             </button>
-            <button className="btn btn-primary">Update</button>
+            <Link
+              to={`/tours/update/${tour._id}`}
+              className="btn btn-sm btn-primary"
+            >
+              Update
+            </Link>
           </div>
         </CardBody>
       </Card>

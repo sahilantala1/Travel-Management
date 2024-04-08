@@ -1,4 +1,4 @@
-// AddTour.js
+// AddTour.js File
 import React, { useState } from "react";
 import { BASE_URL } from "../../utils/config";
 import "./AddTour.css";
@@ -14,34 +14,39 @@ const AddTour = ({ onClose }) => {
     price: "",
     maxGroupSize: "",
   });
-
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === "photo") {
+      console.log(e.target.files[0]);
+      setFormData({ ...formData, [e.target.name]: e.target.files[0] });
+    } else {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Set the photo field to the desired file path
-      const updatedFormData = {
-        ...formData,
-        photo: "src/assets/images/register.png",
-      };
+      const postData = new FormData();
+      Object.keys(formData).forEach((key) => {
+        postData.append(key, formData[key]);
+      });
 
       const res = await fetch(`${BASE_URL}/tours`, {
         method: "POST",
         credentials: "include",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedFormData), // Use updatedFormData instead of formData
+        // mode: "no-cors",
+        headers: {},
+        body: postData,
       });
-      const result = await res.json();
-      if (result.success) {
+
+      // Log the response body
+      console.log(res);
+
+      if (res.ok) {
         alert("Tour created successfully!");
         onClose();
       } else {
-        console.error("Failed to create tour:", result.error, result);
+        console.error("Failed to create tour. Response:");
       }
     } catch (error) {
       console.error("Error creating tour:", error);
@@ -52,7 +57,7 @@ const AddTour = ({ onClose }) => {
     <div className="container maincontainer">
       <div className="createtourform container">
         <h2 className="createTour h2 text-center">Create Tour</h2>
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} enctype="multipart/form-data">
           <div className="innerdiv">
             <label>Title</label>
             <input
@@ -90,13 +95,7 @@ const AddTour = ({ onClose }) => {
             />
 
             <label>Photo</label>
-            <input
-              type="file"
-              name="photo"
-              value={formData.photo}
-              onChange={handleChange}
-              required
-            />
+            <input type="file" name="photo" onChange={handleChange} required />
             <label>Description</label>
             <textarea
               name="desc"
