@@ -8,13 +8,11 @@ export const createTour = async (req, res) => {
   try {
     const savedTour = await newTour.save();
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Successfully created",
-        data: savedTour,
-      });
+    res.status(200).json({
+      success: true,
+      message: "Successfully created",
+      data: savedTour,
+    });
   } catch (error) {
     res
       .status(500)
@@ -25,7 +23,9 @@ export const createTour = async (req, res) => {
 //Update Tour
 export const updateTour = async (req, res) => {
   const id = req.params.id;
-
+  if (req.file) {
+    req.body.photo = req.file.filename;
+  }
   try {
     const updatedTour = await Tour.findByIdAndUpdate(
       id,
@@ -39,9 +39,10 @@ export const updateTour = async (req, res) => {
       .status(200)
       .json({
         success: true,
-        message: "Successfully updated",
-        data: updatedTour,
-      });
+        message: "Successfully updated!",
+        data: updatedTour._id,
+      })
+      .end();
   } catch (error) {
     res.status(500).json({ success: false, message: "Failed to update" });
   }
@@ -88,14 +89,12 @@ export const getAllTour = async (req, res) => {
       .skip(page * 8)
       .limit(8);
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        count: tours.length,
-        message: "Successfully",
-        data: tours,
-      });
+    res.status(200).json({
+      success: true,
+      count: tours.length,
+      message: "Successfully",
+      data: tours,
+    });
   } catch (error) {
     res.status(404).json({ success: false, message: "Not Found" });
   }

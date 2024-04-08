@@ -26,30 +26,32 @@ const AddTour = ({ onClose }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      console.log(formData);
-      console.log(JSON.stringify(formData));
       const postData = new FormData();
       Object.keys(formData).forEach((key) => {
-        console.log(key, formData[key]);
         postData.append(key, formData[key]);
       });
-      console.log(postData.entries());
+
       const res = await fetch(`${BASE_URL}/tours`, {
         method: "POST",
         credentials: "include",
-        mode: "no-cors",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        // mode: "no-cors",
+        // headers: {},
         body: postData,
       });
-      const result = await res.json();
-      console.log(result);
-      if (result.success) {
+
+      // Log the response body
+      const responseBody = await res.text();
+      console.log("Response body:", responseBody);
+
+      if (res.ok) {
         alert("Tour created successfully!");
         onClose();
       } else {
-        console.error("Failed to create tour:", result.error, result);
+        console.error(
+          "Failed to create tour. Response:",
+          res.status,
+          responseBody
+        );
       }
     } catch (error) {
       console.error("Error creating tour:", error);

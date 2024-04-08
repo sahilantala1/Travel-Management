@@ -11,9 +11,11 @@ const TourCard2 = ({ tour, onDelete }) => {
   const { totalRating, avgRating } = calculateAvgRating(reviews);
 
   const handleDelete = () => {
-    alert("You Want To Delete");
-    console.log("Delete button clicked for tour ID:", _id);
-    onDelete();
+    const isConfirmed = window.confirm("Are you sure?");
+    if (isConfirmed) {
+      console.log("Delete button clicked for tour ID:", _id);
+      onDelete();
+    }
   };
 
   return (
