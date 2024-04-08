@@ -29,7 +29,7 @@ const router = express.Router();
 router.post("/", upload.single("photo"), verifyAdmin, createTour);
 
 //Update tour
-router.post("/:id", upload.single("photo"), verifyAdmin, updateTour);
+router.put("/:id", upload.single("photo"), verifyAdmin, updateTour);
 
 //Delete tour
 router.delete("/:id", verifyAdmin, deleteTour);

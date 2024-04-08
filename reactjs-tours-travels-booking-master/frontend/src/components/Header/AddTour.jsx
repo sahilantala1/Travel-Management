@@ -35,23 +35,18 @@ const AddTour = ({ onClose }) => {
         method: "POST",
         credentials: "include",
         // mode: "no-cors",
-        // headers: {},
+        headers: {},
         body: postData,
       });
 
       // Log the response body
-      const responseBody = await res.text();
-      console.log("Response body:", responseBody);
+      console.log(res);
 
       if (res.ok) {
         alert("Tour created successfully!");
         onClose();
       } else {
-        console.error(
-          "Failed to create tour. Response:",
-          res.status,
-          responseBody
-        );
+        console.error("Failed to create tour. Response:");
       }
     } catch (error) {
       console.error("Error creating tour:", error);

@@ -20,26 +20,32 @@ function UpdateTour() {
     featured: false,
   });
   const [isUpdated, setIsUpdated] = useState(false);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchTourData() {
       try {
         const response = await fetch(`${BASE_URL}/tours/${id}`);
-        const data = await response.json();
-        setCredentials({
-          id: data.data._id,
-          title: data.data.title || "",
-          city: data.data.city || "",
-          address: data.data.address || "",
-          distance: data.data.distance || "",
-          price: data.data.price || "",
-          maxGroupSize: data.data.maxGroupSize || "",
-          desc: data.data.desc || "",
-          photo: data.data.photo || "",
-          featured: data.data.featured || false,
-        });
+        if (response.ok) {
+          const data = await response.json();
+          setCredentials({
+            id: data.data._id,
+            title: data.data.title || "",
+            city: data.data.city || "",
+            address: data.data.address || "",
+            distance: data.data.distance || "",
+            price: data.data.price || "",
+            maxGroupSize: data.data.maxGroupSize || "",
+            desc: data.data.desc || "",
+            photo: data.data.photo || "",
+            featured: data.data.featured || false,
+          });
+        } else {
+          setError("Failed to fetch tour data");
+        }
       } catch (error) {
         console.error("Error fetching tour data:", error);
+        setError("Error fetching tour data");
       }
     }
 
@@ -48,65 +54,49 @@ function UpdateTour() {
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-    // Use functional updates to ensure you're always using the latest state
-    if (name === "photo") {
-      setCredentials((prevCredentials) => ({
-        ...prevCredentials,
-        [name]: files[0],
-      }));
-    } else {
-      setCredentials((prevCredentials) => ({
-        ...prevCredentials,
-        [name]: value,
-      }));
-    }
+    setCredentials((prevCredentials) => ({
+      ...prevCredentials,
+      [name]: name === "photo" ? files[0] : value,
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const postData = new FormData();
-      // Append all fields except 'photo'
-      Object.keys(credentials).forEach((key) => {
-        if (key !== "photo") {
-          postData.append(key, credentials[key]);
-        }
+      Object.entries(credentials).forEach(([key, value]) => {
+        postData.append(key, value);
       });
 
-      // Append 'photo' separately based on its type
-      if (typeof credentials.photo === "object") {
-        postData.append("photo", credentials.photo);
-      } else {
-        postData.append("photo", credentials.photo);
-      }
+      console.log("Submitting PUT request:", postData);
 
       const res = await fetch(`${BASE_URL}/tours/${id}`, {
-        method: "POST",
-        cache: "no-cache",
+        method: "PUT",
         credentials: "include",
-        headers: {},
+        mode: "cors",
         body: postData,
       });
+      console.log(id);
+      console.log("PUT request response:", res);
 
-      if (res.ok) {
-        alert("Tour updated successfully!");
-        setIsUpdated(true);
-        // Reset the form after successful update
-        setCredentials({
-          id: id,
-          title: "",
-          city: "",
-          address: "",
-          distance: "",
-          price: "",
-          maxGroupSize: "",
-          desc: "",
-          photo: "",
-          featured: false,
-        });
-      } else {
-        console.error("Failed to update tour. Status:", res.status);
+      if (!res.ok) {
+        throw new Error(`Failed to update tour. Status: ${res.status}`);
       }
+
+      alert("Tour updated successfully!");
+      setIsUpdated(true);
+      setCredentials({
+        id: id,
+        title: "",
+        city: "",
+        address: "",
+        distance: "",
+        price: "",
+        maxGroupSize: "",
+        desc: "",
+        photo: "",
+        featured: false,
+      });
     } catch (error) {
       console.error("Error updating tour:", error);
       alert("An error occurred while updating tour: " + error.message);
@@ -118,16 +108,17 @@ function UpdateTour() {
       <Container>
         <Row>
           <Col className="m-auto">
-            {/* Conditional rendering based on isUpdated state */}
             {!isUpdated ? (
               <div className="login__container d-flex justify-content-between">
                 <div className="login__img">
-                  {/* Conditionally render the image based on whether a new image is selected or not */}
-                  {typeof credentials.photo === "object" ? (
-                    <img src={URL.createObjectURL(credentials.photo)} alt="" />
-                  ) : (
-                    <img src={IMAGE_URL + credentials.photo} alt="" />
-                  )}
+                  <img
+                    src={
+                      typeof credentials.photo === "object"
+                        ? URL.createObjectURL(credentials.photo)
+                        : IMAGE_URL + credentials.photo
+                    }
+                    alt=""
+                  />
                 </div>
 
                 <div className="login__form">
@@ -138,6 +129,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Title"
                         id="title"
+                        name="title"
                         value={credentials.title}
                         onChange={handleChange}
                         required
@@ -148,6 +140,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="City"
                         id="city"
+                        name="city"
                         value={credentials.city}
                         onChange={handleChange}
                         required
@@ -158,6 +151,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Address"
                         id="address"
+                        name="address"
                         value={credentials.address}
                         onChange={handleChange}
                         required
@@ -168,6 +162,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Distance"
                         id="distance"
+                        name="distance"
                         value={credentials.distance}
                         onChange={handleChange}
                         required
@@ -178,6 +173,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Price"
                         id="price"
+                        name="price"
                         value={credentials.price}
                         onChange={handleChange}
                         required
@@ -188,6 +184,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Max Group Size"
                         id="maxGroupSize"
+                        name="maxGroupSize"
                         value={credentials.maxGroupSize}
                         onChange={handleChange}
                         required
@@ -198,6 +195,7 @@ function UpdateTour() {
                         type="text"
                         placeholder="Description"
                         id="desc"
+                        name="desc"
                         value={credentials.desc}
                         onChange={handleChange}
                         required
@@ -213,7 +211,6 @@ function UpdateTour() {
                       />
                     </FormGroup>
                     <button
-                      onClick={handleSubmit}
                       className="btn btn-primary secondary__btn auth__btn"
                       type="submit"
                     >
@@ -223,7 +220,6 @@ function UpdateTour() {
                 </div>
               </div>
             ) : (
-              // Render ListTour component if isUpdated state is true
               <ListTour />
             )}
           </Col>
