@@ -1,6 +1,6 @@
 import React from "react";
 import { Card, CardBody } from "reactstrap";
-import { Link } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom"; // Import useParams and useHistory
 import "./tour-card.css";
 import calculateAvgRating from "../../utils/avgRating";
 import { IMAGE_URL } from "../../utils/config";
@@ -10,12 +10,20 @@ const TourCard2 = ({ tour, onDelete }) => {
 
   const { totalRating, avgRating } = calculateAvgRating(reviews);
 
+  const { id } = useParams(); // Access the id parameter from the URL
+  const history = useNavigate(); // Initialize useHistory hook
+
   const handleDelete = () => {
     const isConfirmed = window.confirm("Are you sure?");
     if (isConfirmed) {
       console.log("Delete button clicked for tour ID:", _id);
       onDelete();
     }
+  };
+
+  const handleUpdate = () => {
+    history(`/tours/update/${_id}`);
+    console.log(_id);
   };
 
   return (
@@ -42,9 +50,7 @@ const TourCard2 = ({ tour, onDelete }) => {
             </span>
           </div>
 
-          <h5 className="tour__title">
-            <Link to={`/tours/${_id}`}>{title}</Link>
-          </h5>
+          <h5 className="tour__title">{title}</h5>
 
           <div className="card__bottom d-flex align-items-center justify-content-between mt-3">
             <h5>
@@ -54,12 +60,9 @@ const TourCard2 = ({ tour, onDelete }) => {
             <button className="btn btn-danger" onClick={handleDelete}>
               Delete
             </button>
-            <Link
-              to={`/tours/update/${tour._id}`}
-              className="btn btn-sm btn-primary"
-            >
+            <button className="btn btn-primary" onClick={handleUpdate}>
               Update
-            </Link>
+            </button>
           </div>
         </CardBody>
       </Card>
