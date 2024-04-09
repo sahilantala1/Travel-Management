@@ -153,11 +153,9 @@ const Booking = ({ tour, avgRating }) => {
 
         <Button
           className="btn primary__btn w-100 mt-4"
-          // id="btnbook"
+          //  id="btnbook"
           onClick={handleClick}
-        >
-          Book Now
-        </Button>
+        ></Button>
       </div>
     </div>
   );
