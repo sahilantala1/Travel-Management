@@ -385,7 +385,7 @@ const AdminPanel = ({ username }) => {
                 <React.Fragment key={booking.userId}>
                   <tr>
                     <td>{booking.userId}</td>
-                    <td>{booking.userName}</td>
+                    <td>{booking.fullName}</td>
                     <td>{booking.userEmail}</td>
                     <td>{booking.tourName}</td>
                     <td>
