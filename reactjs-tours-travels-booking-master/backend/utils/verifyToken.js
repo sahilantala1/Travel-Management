@@ -24,7 +24,11 @@ export const verifyToken = (req, res, next) => {
 
 export const verifyUser = (req, res, next) => {
   verifyToken(req, res, () => {
-    if (req.user.id === req.params.id || req.user.role === "user") {
+    if (
+      req.user.id === req.params.id ||
+      req.user.role === "user" ||
+      req.user.role === "admin"
+    ) {
       next();
     } else {
       return res
