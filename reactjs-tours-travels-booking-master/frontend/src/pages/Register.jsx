@@ -9,20 +9,42 @@ import { BASE_URL } from "../utils/config";
 
 const Register = () => {
   const [credentials, setCredentials] = useState({
-    userName: undefined,
-    email: undefined,
-    password: undefined,
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const { dispatch } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setCredentials((prev) => ({ ...prev, [e.target.id]: e.target.value }));
-  };
+  const { id, value } = e.target;
+
+  if (id === "username") {
+    // Allow only letters in the username field
+    const newValue = value.replace(/[^A-Za-z]/gi, "");
+    setCredentials((prev) => ({ ...prev, [id]: newValue }));
+  } else if (id === "email") {
+    // Allow only lowercase letters in the email field
+    const newValue = value.replace(/[^a-z@0-9.]/g, "");
+
+    setCredentials((prev) => ({ ...prev, [id]: newValue }));
+  }
+  else {
+    // For other fields (password, confirmPassword), allow any input
+    setCredentials((prev) => ({ ...prev, [id]: value }));
+  }
+};
+
+  
 
   const handleClick = async (e) => {
     e.preventDefault();
+    if (credentials.password !== credentials.confirmPassword) {
+      alert("Password and confirm password do not match.");
+      return;
+    }
 
     try {
       const res = await fetch(`${BASE_URL}/auth/register`, {
@@ -65,6 +87,7 @@ const Register = () => {
                       type="text"
                       placeholder="Username"
                       id="username"
+                      value={credentials.username}
                       onChange={handleChange}
                       required
                     />
@@ -74,7 +97,9 @@ const Register = () => {
                       type="email"
                       placeholder="Email"
                       id="email"
+                      value={credentials.email}
                       onChange={handleChange}
+                      maxLength="50"
                       required
                     />
                   </FormGroup>
@@ -83,7 +108,22 @@ const Register = () => {
                       type="password"
                       placeholder="Password"
                       id="password"
+                      value={credentials.password}
                       onChange={handleChange}
+                      minLength="8"
+                      maxLength="30"
+                      required
+                    />
+                  </FormGroup>
+                  <FormGroup>
+                    <input
+                      type="password"
+                      placeholder="Confirm Password"
+                      id="confirmPassword"
+                      value={credentials.confirmPassword}
+                      onChange={handleChange}
+                      minLength="8"
+                      maxLength="30"
                       required
                     />
                   </FormGroup>

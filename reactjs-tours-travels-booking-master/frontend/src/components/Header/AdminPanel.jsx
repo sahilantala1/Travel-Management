@@ -1,25 +1,26 @@
 import React, { useState, useContext } from "react";
 import ListTour from "./ListTour";
-// import Bs
 import { BASE_URL } from "../../utils/config";
 import "./Admin.css";
 import { AuthContext } from "../../context/AuthContext";
-// import Tours from "../../pages/Tours";
+import AddTour from "./AddTour";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
 const AdminPanel = ({ username }) => {
-  // State to control the visibility of the Tours component
+  // State to control the visibility of the Users and Tours components
+  const [showUsers, setShowUsers] = useState(false);
   const [showTours, setShowTours] = useState(false);
-  const { user, token } = useContext(AuthContext);
+  const [showAddTour, setShowAddTour] = useState(false);
+  const [users, setUsers] = useState([]);
+  const { token } = useContext(AuthContext);
   console.log(token);
+
   const handleButtonClick = async (buttonName) => {
-    // Handle button click based on the buttonName if needed
-    if (buttonName === "listTours") {
-      setShowTours(true); // Show Tours component when List Tours button is clicked
-    }
-
     if (buttonName === "listUsers") {
-      // setuser(true);
-
+      setShowUsers(true);
+      setShowTours(false);
+      setShowAddTour(false); // Close AddTour form if open
       const res = await fetch(`${BASE_URL}/users`, {
         method: "GET",
         credentials: "include",
@@ -28,15 +29,37 @@ const AdminPanel = ({ username }) => {
         },
       });
       const result = await res.json();
-      if (!result.success) alert("you are not admin");
+      if (!result.success) alert("You are not an admin");
+      else setUsers(result.data);
+    } else if (buttonName === "listTours") {
+      setShowTours(true);
+      setShowUsers(false);
+      setShowAddTour(false); // Close AddTour form if open
+    } else if (buttonName === "addTour") {
+      setShowAddTour(true);
+      setShowTours(false);
+      setShowUsers(false);
+    }
+  };
 
-      console.log(result, token);
+  const deleteUser = async (userId) => {
+    const res = await fetch(`${BASE_URL}/users/${userId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: {
+        "content-type": "application/json",
+      },
+    });
+    const result = await res.json();
+    if (result.success) {
+      setUsers(users.filter(user => user._id !== userId)); // Update user list after deletion
+    } else {
+      alert("Failed to delete user");
     }
   };
 
   return (
     <>
-      <h1 className="h1 text-center">Admin</h1>
       <div className="container admin-panel">
         <div className="left-panel">
           <button
@@ -55,13 +78,43 @@ const AdminPanel = ({ username }) => {
             className="btn btn-primary m-2"
             onClick={() => handleButtonClick("addTour")}
           >
-            Add Tour
+            Create Tour
           </button>
         </div>
       </div>
 
-      {/* Render Tours component if showTours state is true */}
+      {showUsers && (
+        <div className="container user-list">
+          <h2 className="userHead h2 text-center ">User List</h2>
+          <ul>
+            <li>
+              <div>Number Of Users</div>
+              <div>ID</div>
+              <div>Username</div>
+              <div>Email</div>
+              <div className="delete-user">Action</div> {/* Added column for action */}
+            </li>
+            {users.map(
+              (user, index) =>
+                user.username !== "admin" && (
+                  <li key={user._id}>
+                    <div>{index}</div>
+                    <div>{user._id}</div>
+                    <div>{user.username}</div>
+                    <div>{user.email}</div>
+                    <div>
+                    <FontAwesomeIcon style={{ backgroundColor: 'white', color: 'red' }} 
+                     icon={faTrashAlt} onClick={() => deleteUser(user._id)} />
+                    </div>
+                  </li>
+                )
+            )}
+          </ul>
+        </div>
+      )}
+
       {showTours && <ListTour />}
+      {showAddTour && <AddTour onClose={() => setShowAddTour(false)} />}
     </>
   );
 };
