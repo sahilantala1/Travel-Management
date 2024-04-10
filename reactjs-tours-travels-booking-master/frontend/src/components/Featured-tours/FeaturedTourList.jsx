@@ -25,7 +25,7 @@ const FeaturedTourList = () => {
 
   return (
     <>
-      <h2 className="Heading">Flights And Hotels</h2>
+      {/* <h2 className="Heading">Tours</h2> */}
       {featuredTours.map((tour) => (
         <Col lg="3" md="4" sm="6" className="mb-4" key={tour._id}>
           <TourCard tour={tour} />
