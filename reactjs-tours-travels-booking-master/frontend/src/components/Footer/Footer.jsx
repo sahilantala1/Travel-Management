@@ -45,7 +45,8 @@ const Footer = () => {
             <div className="logo">
               <img src={logo} alt="" />
               <p>
-              Travel the world, where every moment is an adventure waiting to be discovered.
+                Travel the world, where every moment is an adventure waiting to
+                be discovered.
               </p>
               <div className="social__link d-flex align-items-center gap-4">
                 <span>
