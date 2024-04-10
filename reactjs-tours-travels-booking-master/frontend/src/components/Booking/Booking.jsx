@@ -165,7 +165,7 @@
 
 import React, { useState, useContext, useEffect } from "react";
 import "./booking.css";
-import { Form, FormGroup, ListGroup, ListGroupItem } from "reactstrap";
+import { Button, Form, FormGroup, ListGroup, ListGroupItem } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../../context/AuthContext";
 import { BASE_URL } from "../../utils/config";
@@ -200,26 +200,6 @@ const Booking = ({ tour, avgRating }) => {
     }
   }, [booking]);
 
-  useEffect(() => {
-    if (user && user !== undefined && user !== null) {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/payment-button.js";
-      script.setAttribute("data-payment_button_id", "pl_Nw7DdQTHq74sIo");
-      script.async = true;
-
-      const form = document.getElementById("bookingForm");
-      if (form) {
-        form.appendChild(script);
-      }
-
-      return () => {
-        if (form) {
-          form.removeChild(script);
-        }
-      };
-    }
-  }, [user]);
-
   const handleChange = (e) => {
     setBooking((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
@@ -250,7 +230,8 @@ const Booking = ({ tour, avgRating }) => {
       if (!res.ok) {
         return alert(result.message);
       }
-      navigate("/thank-you");
+
+      navigate("/pay-now");
     } catch (error) {
       alert(error.message);
     }
@@ -335,11 +316,14 @@ const Booking = ({ tour, avgRating }) => {
             <span>${totalAmount}</span>
           </ListGroupItem>
         </ListGroup>
+        <Button
+          className="btn primary__btn w-100 mt-4"
+          id="btnbook"
+          onClick={handleClick}
+        >
+          Book Now
+        </Button>
       </div>
-      {isFormFilled && (
-        <div className="razorpay-payment-button" id="bookingForm"></div>
-      )}
-      {/* =============== BOOKING BOTTOM END ============= */}
     </div>
   );
 };
