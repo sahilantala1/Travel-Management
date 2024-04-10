@@ -191,7 +191,7 @@ const AdminPanel = ({ username }) => {
                         </tr>
                         {selectedBookingId === booking.userId && (
                           <tr>
-                            <td colSpan="5">
+                            <td colSpan="3">
                               <p>User ID: {booking.userId}</p>
                               <p>User Name: {booking.fullName}</p>
                               <p>User Email: {booking.userEmail}</p>
@@ -201,6 +201,7 @@ const AdminPanel = ({ username }) => {
 
                               <p>Time: {booking.createdAt}</p>
                             </td>
+                            <td colSpan="3"></td>
                           </tr>
                         )}
                       </React.Fragment>

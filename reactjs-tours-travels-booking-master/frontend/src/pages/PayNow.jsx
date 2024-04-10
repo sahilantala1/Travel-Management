@@ -7,24 +7,24 @@ import "./PayNow.css";
 
 const PayNow = () => {
   const { user } = useContext(AuthContext);
+
   useEffect(() => {
-    if (user && user !== undefined && user !== null) {
-      const script = document.createElement("script");
-      script.src = "https://checkout.razorpay.com/v1/payment-button.js";
-      script.setAttribute("data-payment_button_id", "pl_NwqcSo0BIcwgcu");
-      script.async = true;
+    // Always add Razorpay payment button script inside 'form' tag
+    const script = document.createElement("script");
+    script.src = "https://checkout.razorpay.com/v1/payment-button.js";
+    script.setAttribute("data-payment_button_id", "pl_NwqcSo0BIcwgcu");
+    script.async = true;
 
-      const form = document.getElementById("bookingForm");
-      if (form) {
-        form.appendChild(script);
-      }
-
-      return () => {
-        if (form) {
-          form.removeChild(script);
-        }
-      };
+    const form = document.getElementById("bookingForm");
+    if (form) {
+      form.appendChild(script);
     }
+
+    return () => {
+      if (form) {
+        form.removeChild(script);
+      }
+    };
   }, [user]);
 
   return (
@@ -34,14 +34,15 @@ const PayNow = () => {
           <Col lg="12" className="pt-5 text-center">
             <div className="thank__you">
               <span>
-                <i class="ri-checkbox-circle-line"></i>
+                <i className="ri-checkbox-circle-line"></i>
               </span>
               <h1 className="mb-3 fw-semibold">Pay Now</h1>
 
-              <Button
-                className="btn primary__btn w-25"
+              {/* Render the form tag for Razorpay payment button */}
+              <form
+                className="btn primary__btn w-100 mt-4 btn btn-secondary"
                 id="bookingForm"
-              ></Button>
+              ></form>
             </div>
           </Col>
         </Row>

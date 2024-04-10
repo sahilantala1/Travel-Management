@@ -255,11 +255,7 @@ const Booking = ({ tour, avgRating }) => {
       {/* =============== BOOKING FORM START ============== */}
       <div className="booking__form">
         <h5>Information</h5>
-        <Form
-          id="bookingForm"
-          className="booking__info-form"
-          onSubmit={handleClick}
-        >
+        <Form className="booking__info-form" onSubmit={handleClick}>
           <FormGroup>
             <input
               type="text"
